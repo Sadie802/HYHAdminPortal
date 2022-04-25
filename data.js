@@ -1,8 +1,9 @@
 //----BOILER PLATE -- CONNECTING TO MONGO DATABASE ---//
-
+require("dotenv").config();
+let mongoURI = process.env.mongoURI
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb://localhost:27017/dummyHYH", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 
@@ -21,7 +22,8 @@ const requestSchema = new mongoose.Schema({
    dateCreated: Date,
    comments: String,
    recipientState: String,
-   itemCategory: String
+   itemCategory: String,
+   published: Boolean
 
 })
 
