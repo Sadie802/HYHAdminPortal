@@ -17,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 //bringing in schema
 const requestSchema = require("./data.js");
-const { response } = require("express");
 const { send } = require("express/lib/response");
 
 //model for schema instances
@@ -168,6 +167,46 @@ app.post("/unpublish", async (request, response) => {
 app.get("/unpublish", async (request, response) => {
   let unpublished = await Request.find({ published: false });
   response.json(unpublished);
+});
+
+app.post("/publish", async (request, response) => {
+  try {
+    let itemId = request.body.itemId;
+    itemId = ObjectId(itemId);
+    let isFunded = request.body.isFunded;
+    let published = request.body.published;
+    let itemName = request.body.itemName;
+    let itemPrice = request.body.itemPrice;
+    let donationDescription = request.body.donationDescription;
+    let recipientName = request.body.recipientName;
+    let recipientUSLocation = request.body.recipientUSLocation;
+    let dateCreated = request.body.dateCreated;
+    let comments = request.body.comments;
+    let recipientState = request.body.recipientState;
+    let itemCategory = request.body.itemCategory;
+    await Request.updateOne(
+      { _id: itemId },
+      {
+        $set: {
+          isFunded: isFunded,
+          published: published,
+          itemName: itemName,
+          itemPrice: itemPrice,
+          donationDescription: donationDescription,
+          recipientName: recipientName,
+          recipientUSLocation: recipientUSLocation,
+          dateCreated: dateCreated,
+          comments: comments,
+          recipientState: recipientState,
+          itemCategory: itemCategory,
+        },
+      }
+    );
+    response.json("/");
+  } catch (error) {
+    response.status(404);
+    send("Request not found");
+  }
 });
 
 app.listen(port, () => {
